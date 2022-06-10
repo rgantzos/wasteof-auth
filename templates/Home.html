@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>wasteof auth</title>
+    <link data-n-head="ssr" rel="icon" type="image/x-icon" href="https://wasteof.money/brand/logo.svg">
+  </head>
+  <body>
+    <center>
+    <div class="main">
+    <img src="https://wasteof.money/brand/nav-logo.svg">
+    <h1>wasteof auth</h1>
+      <h2 class="example2"></h2>
+      <h2>How to Use</h2>
+      <p class="info">Start by fetching a code from <span>https://wasteof.auth.gantzos.com/generate/</span>. The response will be in JSON, containing a url and a code. You will send the user to the url, but add a redirect link to the end, like this: <span>?redirect=www.example.com/done</span>. Send the user there, but make sure to keep the code from the original response safe on their end. After the user is done authenticating and they are sent back to the redirect url, use the code that they've had since the beginning and fetch <br><span>https://wasteof.auth.gantzos.com/getUser/{ their code }/</span>. It will return their wasteof username.</p>
+      <button onclick="example()" class="primary example">See an Example</button>
+      </div>
+      <p class="disclaimer">Disclaimer: wasteof auth is not in any way affiliated with wasteof.money</p>
+      </center>
+  </body>
+  <script>
+
+    async function example() {
+      var response = await fetch('https://wasteof.auth.gantzos.com/generate/')
+      var data = await response.json()
+      document.cookie = `code=${data['code']}; expires=Thu, 18 Dec 9999 12:00:00 UTC; path=/`;
+      window.location.href = `${data['url']}?redirect=https://wasteof.auth.gantzos.com/done/`
+    }
+
+    if (window.location.href.includes('/done/')) {
+      function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+      async function showExample() {
+        if (getCookie('code') !== undefined) {
+      var response = await fetch('https://wasteof.auth.gantzos.com/getUser/'+getCookie('code')+'/')
+      var data = await response.text()
+      document.querySelector('h2.example2').textContent = `Hello, @${data}!`
+document.cookie = `code=ok; expires=Thu, 18 Dec 0001 12:00:00 UTC; path=/`;
+        }
+    }
+    showExample()
+    }
+    
+  </script>
+  <style>
+
+    .example {
+      margin-top: 2vw;
+    }
+
+    .example2 {
+      font-size: 1.5vw;
+      color: #6366f1;
+    }
+
+    body {
+      font-family: arial;
+      background-color: #101827;
+      color: white;
+    }
+
+    span {
+      background-color: #101827;
+      border-radius: 0.5vw;
+      padding: 0.5vw;
+    }
+
+    .domain {
+      font-size: 1.3vw;
+      color: #6366f1;
+      margin-top: -2vw;
+    }
+
+    img {
+      width: 10vw;
+      margin-top: 5vw;
+    }
+
+    .info {
+      line-height: 200%;
+      width: 60vw;
+    }
+
+    p {
+      margin-top: 3vw;
+      font-size: 1vw;
+      color: #9ca3af;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .disclaimer {
+      width: 30vw;
+      position: fixed;
+      bottom: 1vw;
+      left: 35vw;
+    }
+
+    button {
+      width: 10vw;
+      height: 3vw;
+      outline: none;
+      border: 0px;
+      border-radius: 0.5vw;
+      font-family: arial;
+      cursor: pointer;
+      color: white;
+      font-size: 1vw;
+    }
+
+    .main {
+      position: fixed;
+      left: 15vw;
+      top: 2vw;
+      background-color: #1f2937;
+      width: 70vw;
+      height: 48vw;
+      border-radius: 4vw;
+      border: 3px solid #374151;
+    }
+
+    h1 {
+      font-size: 4vw;
+      text-decoration: underline;
+      text-decoration-color: #6366f1;
+    }
+
+    h2 {
+      font-size: 2vw;
+    }
+
+    .primary {
+      background-color: #6366f1;
+    }
+
+    .secondary {
+      background-color: #374151;
+    }
+    
+  </style>
+</html>
